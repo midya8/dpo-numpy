@@ -138,8 +138,8 @@ def test_dpo_loss_grad():
     pc = policy.log_probs(chosen).data
     pl = policy.log_probs(rejected).data
     # mean per-token log prob difference, matching dpo.margins' reduction
-    gap = ((pc - ref_lp_c).sum(axis=1)
-           - (pl - ref_lp_r).sum(axis=1))
+    gap = ((pc.sum(axis=1) - ref_lp_c)
+           - (pl.sum(axis=1) - ref_lp_r))
     manual = -np.log(1.0 / (1.0 + np.exp(-beta * gap))).mean()
     assert abs(float(loss.data) - manual) < 1e-8
 
